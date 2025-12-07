@@ -1,0 +1,110 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Price Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #4caf50;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background: #3c8d3e;
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Discount Price Calculator</h2>
+
+    <label>Original Price (₹)</label>
+    <input type="number" id="price" placeholder="Enter price">
+
+    <label>Discount (%)</label>
+    <input type="number" id="discount" placeholder="Enter discount">
+
+    <label>Tax (%)</label>
+    <input type="number" id="tax" placeholder="Enter tax">
+
+    <label>Promo Code (Optional)</label>
+    <input type="text" id="coupon" placeholder="SAVE10">
+
+    <button id="calcBtn">Calculate</button>
+
+    <h3 id="result">Final Price: ₹0</h3>
+</div>
+
+<script>
+document.getElementById("calcBtn").addEventListener("click", function() {
+
+    let price = parseFloat(document.getElementById("price").value);
+    let discount = parseFloat(document.getElementById("discount").value || 0);
+    let tax = parseFloat(document.getElementById("tax").value || 0);
+    let coupon = document.getElementById("coupon").value.trim().toUpperCase();
+
+    if (!price || price <= 0) {
+        document.getElementById("result").innerText = "Enter a valid price!";
+        return;
+    }
+
+    // Step 1: Discount
+    let discountAmount = price * (discount / 100);
+    let discountedPrice = price - discountAmount;
+
+    // Step 2: Promo code
+    let couponDiscount = 0;
+    if (coupon === "SAVE10") {
+        couponDiscount = discountedPrice * 0.10; // extra 10% off
+    }
+
+    let afterCoupon = discountedPrice - couponDiscount;
+
+    // Step 3: Tax
+    let taxAmount = afterCoupon * (tax / 100);
+
+    // Step 4: Final Price
+    let finalPrice = afterCoupon + taxAmount;
+
+    document.getElementById("result").innerText =
+        `Final Price: ₹${finalPrice.toFixed(2)}`;
+});
+</script>
+
+</body>
+</html>
